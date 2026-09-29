@@ -1,30 +1,39 @@
 # Ticket Management Dashboard
 
-## Project
-Professional ticket-management dashboard built with HTML, CSS and JavaScript.
+A web-based support ticket dashboard for creating, managing, filtering, and tracking customer support tickets.
 
-## Required Features
-- 8-10 sample tickets
-- Create tickets
-- Ticket fields: title, client, priority, status, created date
+## Tech Stack
+
+- HTML
+- CSS
+- JavaScript
+- Browser LocalStorage
+
+## Features
+
+- View 8 sample support tickets
+- Create new tickets
 - View ticket details
-- Change status
-- Change priority
-- Search and filter
-- Delete tickets
-- Dashboard statistics
-- Sorting by priority/date (additional improvement)
+- Update ticket status: Open, In Progress, Resolved
+- Change priority: Low, Medium, High
+- Search tickets by title or client
+- Filter by status and priority
+- Delete tickets with confirmation
+- Dashboard statistics for ticket status
+- Sort tickets by priority and date
 
-## Run locally
-Open `index.html` in a modern browser.
+## Extra Feature
 
-## Storage
-Browser LocalStorage; no backend required.
+### Export Tickets to CSV
 
-## AI Usage
-AI tool used: ChatGPT.
-Purpose: Used for guidance, debugging assistance, and understanding implementation steps.
+Added an option to export the current ticket data as a CSV file.
 
-## Deployment
-GitHub Repository: [add after publishing]
-Live Demo: [add after deployment]
+This makes it easier for support teams to download and analyze ticket information outside the dashboard.
+
+## Project Structure
+
+```text
+index.html
+style.css
+script.js
+README.md
