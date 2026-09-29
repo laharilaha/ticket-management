@@ -6,83 +6,224 @@
   <title>SupportDesk | Ticket Management</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
   <div class="app">
+
+    <!-- HEADER -->
     <header class="topbar">
+
       <div>
         <h1>SupportDesk</h1>
         <p>Ticket Management Dashboard</p>
       </div>
-      <button id="addTicketBtn" class="primary-btn">+ Add Ticket</button>
+
+      <div class="header-actions">
+
+        <button id="exportCsvBtn" class="secondary-btn">
+          Export CSV
+        </button>
+
+        <button id="addTicketBtn" class="primary-btn">
+          + Add Ticket
+        </button>
+
+      </div>
+
     </header>
 
+
+    <!-- DASHBOARD STATISTICS -->
     <section class="stats" id="stats">
-      <div class="stat-card"><span>Total Tickets</span><strong id="totalCount">0</strong></div>
-      <div class="stat-card"><span>Open</span><strong id="openCount">0</strong></div>
-      <div class="stat-card"><span>In Progress</span><strong id="progressCount">0</strong></div>
-      <div class="stat-card"><span>Resolved</span><strong id="resolvedCount">0</strong></div>
+
+      <div class="stat-card">
+        <span>Total Tickets</span>
+        <strong id="totalCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Open</span>
+        <strong id="openCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>In Progress</span>
+        <strong id="progressCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Resolved</span>
+        <strong id="resolvedCount">0</strong>
+      </div>
+
     </section>
 
+
+    <!-- SEARCH AND FILTERS -->
     <section class="controls">
-      <input id="searchInput" type="text" placeholder="Search tickets or clients...">
+
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="Search tickets or clients..."
+      >
+
       <select id="statusFilter">
         <option value="all">All Statuses</option>
         <option value="Open">Open</option>
         <option value="In Progress">In Progress</option>
         <option value="Resolved">Resolved</option>
       </select>
+
       <select id="priorityFilter">
         <option value="all">All Priorities</option>
         <option value="High">High</option>
         <option value="Medium">Medium</option>
         <option value="Low">Low</option>
       </select>
+
       <select id="sortSelect">
         <option value="newest">Newest First</option>
         <option value="oldest">Oldest First</option>
         <option value="priority">Priority</option>
       </select>
+
     </section>
 
+
+    <!-- MAIN CONTENT -->
     <section class="content">
+
+      <!-- TICKETS LIST -->
       <div>
+
         <div class="section-heading">
+
           <h2>Support Tickets</h2>
-          <span id="ticketCount">0 tickets</span>
+
+          <span id="ticketCount">
+            0 tickets
+          </span>
+
         </div>
+
         <div id="tickets" class="tickets"></div>
+
       </div>
 
-      <aside id="detailsPanel" class="details-panel">
+
+      <!-- DETAILS PANEL -->
+      <aside
+        id="detailsPanel"
+        class="details-panel"
+      >
+
         <div class="empty-details">
+
           <h3>Select a ticket</h3>
-          <p>Click a ticket to view its details.</p>
+
+          <p>
+            Click a ticket to view its details.
+          </p>
+
         </div>
+
       </aside>
+
     </section>
+
   </div>
 
-  <div id="ticketModal" class="modal hidden">
+
+  <!-- CREATE TICKET MODAL -->
+  <div
+    id="ticketModal"
+    class="modal hidden"
+  >
+
     <div class="modal-content">
+
       <div class="modal-header">
+
         <h2>Create New Ticket</h2>
-        <button id="closeModalBtn" class="close-btn">&times;</button>
+
+        <button
+          id="closeModalBtn"
+          class="close-btn"
+          type="button"
+        >
+          &times;
+        </button>
+
       </div>
+
+
       <form id="ticketForm">
-        <label>Ticket Title<input type="text" id="titleInput" required></label>
-        <label>Client<input type="text" id="clientInput" required></label>
-        <label>Priority
-          <select id="priorityInput">
-            <option value="Low">Low</option>
-            <option value="Medium" selected>Medium</option>
-            <option value="High">High</option>
-          </select>
+
+        <label>
+          Ticket Title
+
+          <input
+            type="text"
+            id="titleInput"
+            placeholder="Enter ticket title"
+            required
+          >
+
         </label>
-        <button type="submit" class="primary-btn">Create Ticket</button>
+
+
+        <label>
+          Client
+
+          <input
+            type="text"
+            id="clientInput"
+            placeholder="Enter client name"
+            required
+          >
+
+        </label>
+
+
+        <label>
+          Priority
+
+          <select id="priorityInput">
+
+            <option value="Low">
+              Low
+            </option>
+
+            <option value="Medium" selected>
+              Medium
+            </option>
+
+            <option value="High">
+              High
+            </option>
+
+          </select>
+
+        </label>
+
+
+        <button
+          type="submit"
+          class="primary-btn"
+        >
+          Create Ticket
+        </button>
+
       </form>
+
     </div>
+
   </div>
+
 
   <script src="script.js"></script>
+
 </body>
 </html>

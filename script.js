@@ -74,6 +74,10 @@ if (!Array.isArray(tickets) || tickets.length === 0) {
   saveTickets();
 }
 
+/* =========================
+   DOM ELEMENTS
+========================= */
+
 const ticketsContainer = document.getElementById("tickets");
 const searchInput = document.getElementById("searchInput");
 const statusFilter = document.getElementById("statusFilter");
@@ -97,9 +101,21 @@ const titleInput = document.getElementById("titleInput");
 const clientInput = document.getElementById("clientInput");
 const priorityInput = document.getElementById("priorityInput");
 
+const exportCsvBtn = document.getElementById("exportCsvBtn");
+
+
+/* =========================
+   LOCAL STORAGE
+========================= */
+
 function saveTickets() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tickets));
 }
+
+
+/* =========================
+   DASHBOARD STATS
+========================= */
 
 function updateStats() {
   totalCount.textContent = tickets.length;
@@ -114,6 +130,11 @@ function updateStats() {
     tickets.filter(ticket => ticket.status === "Resolved").length;
 }
 
+
+/* =========================
+   PRIORITY SORTING
+========================= */
+
 function priorityRank(priority) {
   return {
     High: 3,
@@ -121,6 +142,11 @@ function priorityRank(priority) {
     Low: 1
   }[priority] || 0;
 }
+
+
+/* =========================
+   FILTER + SORT
+========================= */
 
 function getFilteredTickets() {
   const search = searchInput.value.trim().toLowerCase();
@@ -147,15 +173,18 @@ function getFilteredTickets() {
   result.sort((a, b) => {
 
     if (sort === "newest") {
-      return new Date(b.created_date) - new Date(a.created_date);
+      return new Date(b.created_date) -
+             new Date(a.created_date);
     }
 
     if (sort === "oldest") {
-      return new Date(a.created_date) - new Date(b.created_date);
+      return new Date(a.created_date) -
+             new Date(b.created_date);
     }
 
     if (sort === "priority") {
-      return priorityRank(b.priority) - priorityRank(a.priority);
+      return priorityRank(b.priority) -
+             priorityRank(a.priority);
     }
 
     return 0;
@@ -164,13 +193,20 @@ function getFilteredTickets() {
   return result;
 }
 
+
+/* =========================
+   RENDER TICKETS
+========================= */
+
 function renderTickets() {
 
   const filteredTickets = getFilteredTickets();
 
   ticketCount.textContent =
     `${filteredTickets.length} ${
-      filteredTickets.length === 1 ? "ticket" : "tickets"
+      filteredTickets.length === 1
+        ? "ticket"
+        : "tickets"
     }`;
 
   if (filteredTickets.length === 0) {
@@ -185,7 +221,8 @@ function renderTickets() {
     return;
   }
 
-  ticketsContainer.innerHTML = filteredTickets.map(ticket => `
+  ticketsContainer.innerHTML =
+    filteredTickets.map(ticket => `
 
     <article class="ticket">
 
@@ -193,7 +230,9 @@ function renderTickets() {
 
         <div>
 
-          <h3>${escapeHtml(ticket.title)}</h3>
+          <h3>
+            ${escapeHtml(ticket.title)}
+          </h3>
 
           <p class="client">
             ${escapeHtml(ticket.client)}
@@ -204,12 +243,12 @@ function renderTickets() {
         <button
           class="icon-delete"
           onclick="deleteTicket(${ticket.id})"
-          title="Delete ticket"
-        >
+          title="Delete ticket">
           🗑
         </button>
 
       </div>
+
 
       <div class="ticket-meta">
 
@@ -225,60 +264,67 @@ function renderTickets() {
 
       </div>
 
+
       <p class="created">
         Created: ${formatDate(ticket.created_date)}
       </p>
+
 
       <div class="ticket-actions">
 
         <select
           onchange="changeStatus(${ticket.id}, this.value)"
-          aria-label="Change status"
-        >
+          aria-label="Change status">
 
-          <option value="Open"
+          <option
+            value="Open"
             ${ticket.status === "Open" ? "selected" : ""}>
             Open
           </option>
 
-          <option value="In Progress"
+          <option
+            value="In Progress"
             ${ticket.status === "In Progress" ? "selected" : ""}>
             In Progress
           </option>
 
-          <option value="Resolved"
+          <option
+            value="Resolved"
             ${ticket.status === "Resolved" ? "selected" : ""}>
             Resolved
           </option>
 
         </select>
 
+
         <select
           onchange="changePriority(${ticket.id}, this.value)"
-          aria-label="Change priority"
-        >
+          aria-label="Change priority">
 
-          <option value="Low"
+          <option
+            value="Low"
             ${ticket.priority === "Low" ? "selected" : ""}>
             Low
           </option>
 
-          <option value="Medium"
+          <option
+            value="Medium"
             ${ticket.priority === "Medium" ? "selected" : ""}>
             Medium
           </option>
 
-          <option value="High"
+          <option
+            value="High"
             ${ticket.priority === "High" ? "selected" : ""}>
             High
           </option>
 
         </select>
 
+
         <button
           class="secondary-btn"
-          onclick="showDetails(${ticket.id})"
-        >
+          onclick="showDetails(${ticket.id})">
           View Details
         </button>
 
@@ -289,9 +335,16 @@ function renderTickets() {
   `).join("");
 }
 
+
+/* =========================
+   TICKET DETAILS
+========================= */
+
 function showDetails(id) {
 
-  const ticket = tickets.find(ticket => ticket.id === id);
+  const ticket = tickets.find(
+    ticket => ticket.id === id
+  );
 
   if (!ticket) return;
 
@@ -307,30 +360,39 @@ function showDetails(id) {
         ${escapeHtml(ticket.title)}
       </h2>
 
+
       <div class="detail-row">
+
         <span>Client</span>
+
         <strong>
           ${escapeHtml(ticket.client)}
         </strong>
+
       </div>
+
 
       <div class="detail-row">
 
         <span>Priority</span>
 
-        <select onchange="changePriority(${ticket.id}, this.value)">
+        <select
+          onchange="changePriority(${ticket.id}, this.value)">
 
-          <option value="Low"
+          <option
+            value="Low"
             ${ticket.priority === "Low" ? "selected" : ""}>
             Low
           </option>
 
-          <option value="Medium"
+          <option
+            value="Medium"
             ${ticket.priority === "Medium" ? "selected" : ""}>
             Medium
           </option>
 
-          <option value="High"
+          <option
+            value="High"
             ${ticket.priority === "High" ? "selected" : ""}>
             High
           </option>
@@ -339,23 +401,28 @@ function showDetails(id) {
 
       </div>
 
+
       <div class="detail-row">
 
         <span>Status</span>
 
-        <select onchange="changeStatus(${ticket.id}, this.value)">
+        <select
+          onchange="changeStatus(${ticket.id}, this.value)">
 
-          <option value="Open"
+          <option
+            value="Open"
             ${ticket.status === "Open" ? "selected" : ""}>
             Open
           </option>
 
-          <option value="In Progress"
+          <option
+            value="In Progress"
             ${ticket.status === "In Progress" ? "selected" : ""}>
             In Progress
           </option>
 
-          <option value="Resolved"
+          <option
+            value="Resolved"
             ${ticket.status === "Resolved" ? "selected" : ""}>
             Resolved
           </option>
@@ -363,6 +430,7 @@ function showDetails(id) {
         </select>
 
       </div>
+
 
       <div class="detail-row">
 
@@ -379,64 +447,95 @@ function showDetails(id) {
   `;
 }
 
+
+/* =========================
+   CHANGE STATUS
+========================= */
+
 function changeStatus(id, status) {
 
-  const ticket = tickets.find(ticket => ticket.id === id);
+  const ticket = tickets.find(
+    ticket => ticket.id === id
+  );
 
   if (!ticket) return;
 
   ticket.status = status;
 
   saveTickets();
-
   updateStats();
-
   renderTickets();
-
   showDetails(id);
 }
 
+
+/* =========================
+   CHANGE PRIORITY
+========================= */
+
 function changePriority(id, priority) {
 
-  const ticket = tickets.find(ticket => ticket.id === id);
+  const ticket = tickets.find(
+    ticket => ticket.id === id
+  );
 
   if (!ticket) return;
 
   ticket.priority = priority;
 
   saveTickets();
-
   renderTickets();
-
   showDetails(id);
 }
 
+
+/* =========================
+   DELETE TICKET
+========================= */
+
 function deleteTicket(id) {
 
-  const ticket = tickets.find(ticket => ticket.id === id);
+  const ticket = tickets.find(
+    ticket => ticket.id === id
+  );
 
   if (!ticket) return;
 
-  const confirmed =
-    confirm(`Delete "${ticket.title}"?`);
+  const confirmed = confirm(
+    `Delete "${ticket.title}"?`
+  );
 
   if (!confirmed) return;
 
-  tickets = tickets.filter(ticket => ticket.id !== id);
+  tickets = tickets.filter(
+    ticket => ticket.id !== id
+  );
 
   saveTickets();
-
   updateStats();
-
   renderTickets();
 
   detailsPanel.innerHTML = `
+
     <div class="empty-details">
-      <h3>Select a ticket</h3>
-      <p>Click a ticket to view its details.</p>
+
+      <h3>
+        Select a ticket
+      </h3>
+
+      <p>
+        Click a ticket to view its details.
+      </p>
+
     </div>
+
   `;
 }
+
+
+/* =========================
+   ADD TICKET MODAL
+========================= */
 
 function openModal() {
 
@@ -444,6 +543,7 @@ function openModal() {
 
   titleInput.focus();
 }
+
 
 function closeModal() {
 
@@ -454,83 +554,306 @@ function closeModal() {
   priorityInput.value = "Medium";
 }
 
-ticketForm.addEventListener("submit", event => {
 
-  event.preventDefault();
+/* =========================
+   CREATE NEW TICKET
+========================= */
 
-  const title = titleInput.value.trim();
-  const client = clientInput.value.trim();
+ticketForm.addEventListener(
+  "submit",
+  event => {
 
-  if (!title || !client) return;
+    event.preventDefault();
 
-  const newTicket = {
+    const title =
+      titleInput.value.trim();
 
-    id: Date.now(),
+    const client =
+      clientInput.value.trim();
 
-    title: title,
 
-    client: client,
+    /* Validation */
 
-    priority: priorityInput.value,
+    if (!title) {
 
-    status: "Open",
+      alert("Please enter a ticket title.");
 
-    created_date:
-      new Date().toISOString().split("T")[0]
-  };
+      titleInput.focus();
 
-  tickets.unshift(newTicket);
+      return;
+    }
 
-  saveTickets();
 
-  updateStats();
+    if (!client) {
 
-  renderTickets();
+      alert("Please enter a client name.");
 
-  closeModal();
+      clientInput.focus();
 
-  showDetails(newTicket.id);
-});
+      return;
+    }
 
-addTicketBtn.addEventListener("click", openModal);
 
-closeModalBtn.addEventListener("click", closeModal);
+    const newTicket = {
 
-modal.addEventListener("click", event => {
+      id: Date.now(),
 
-  if (event.target === modal) {
+      title,
+
+      client,
+
+      priority:
+        priorityInput.value,
+
+      status:
+        "Open",
+
+      created_date:
+        new Date()
+          .toISOString()
+          .split("T")[0]
+    };
+
+
+    tickets.unshift(newTicket);
+
+    saveTickets();
+
+    updateStats();
+
+    renderTickets();
+
     closeModal();
+
+    showDetails(newTicket.id);
+
+  }
+);
+
+
+/* =========================
+   MODAL EVENTS
+========================= */
+
+addTicketBtn.addEventListener(
+  "click",
+  openModal
+);
+
+
+closeModalBtn.addEventListener(
+  "click",
+  closeModal
+);
+
+
+modal.addEventListener(
+  "click",
+  event => {
+
+    if (event.target === modal) {
+      closeModal();
+    }
+
+  }
+);
+
+
+/* =========================
+   SEARCH + FILTER EVENTS
+========================= */
+
+searchInput.addEventListener(
+  "input",
+  renderTickets
+);
+
+
+statusFilter.addEventListener(
+  "change",
+  renderTickets
+);
+
+
+priorityFilter.addEventListener(
+  "change",
+  renderTickets
+);
+
+
+sortSelect.addEventListener(
+  "change",
+  renderTickets
+);
+
+
+/* =========================
+   EXPORT TICKETS TO CSV
+========================= */
+
+if (exportCsvBtn) {
+
+  exportCsvBtn.addEventListener(
+    "click",
+    exportTicketsToCSV
+  );
+
+}
+
+
+function exportTicketsToCSV() {
+
+  if (tickets.length === 0) {
+
+    alert("No tickets available to export.");
+
+    return;
   }
 
-});
 
-searchInput.addEventListener("input", renderTickets);
+  const headers = [
+    "Title",
+    "Client",
+    "Priority",
+    "Status",
+    "Created Date"
+  ];
 
-statusFilter.addEventListener("change", renderTickets);
 
-priorityFilter.addEventListener("change", renderTickets);
+  const rows = tickets.map(ticket => [
 
-sortSelect.addEventListener("change", renderTickets);
+    ticket.title,
+
+    ticket.client,
+
+    ticket.priority,
+
+    ticket.status,
+
+    ticket.created_date
+
+  ]);
+
+
+  const csvContent = [
+
+    headers,
+
+    ...rows
+
+  ]
+
+    .map(row =>
+      row
+        .map(value =>
+          `"${String(value)
+            .replaceAll('"', '""')}"`
+        )
+        .join(",")
+    )
+
+    .join("\n");
+
+
+  const blob = new Blob(
+    [csvContent],
+    {
+      type: "text/csv;charset=utf-8;"
+    }
+  );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const downloadLink =
+    document.createElement("a");
+
+
+  downloadLink.href = url;
+
+  downloadLink.download =
+    "support-tickets.csv";
+
+
+  document.body.appendChild(
+    downloadLink
+  );
+
+
+  downloadLink.click();
+
+
+  document.body.removeChild(
+    downloadLink
+  );
+
+
+  URL.revokeObjectURL(url);
+
+}
+
+
+/* =========================
+   DATE FORMAT
+========================= */
 
 function formatDate(dateString) {
 
-  return new Date(dateString + "T00:00:00")
-    .toLocaleDateString("en-IN", {
+  return new Date(
+    dateString + "T00:00:00"
+  ).toLocaleDateString(
+    "en-IN",
+    {
       day: "2-digit",
       month: "short",
       year: "numeric"
-    });
+    }
+  );
+
 }
+
+
+/* =========================
+   HTML SECURITY
+========================= */
 
 function escapeHtml(value) {
 
   return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
 }
+
+
+/* =========================
+   INITIAL LOAD
+========================= */
 
 updateStats();
 
